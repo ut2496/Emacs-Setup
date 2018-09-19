@@ -2,7 +2,7 @@
 
 My Personal Emacs setup. Includes a bunch of handy packages that I have personally worked with. Nothing too flashy, great for beginners.
 
-All the packages mentioned in the `init` file, except some are installed on the first run. The path for certain files like `csharp-mode` need to be changed according to your own system.
+All the packages mentioned in the `init` file, except some are installed on the first run. The path for certain files like `csharp-mode` and `Git` need to be changed according to your own system. Remove `omnisharp` if you dont need a .NET framework.
 
 ### Install Emacs on Windows
 http://ftp.gnu.org/gnu/emacs/
