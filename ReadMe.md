@@ -44,7 +44,6 @@ Read the tutorial for an extensive guide.
 * `C-g    ` -  Quit. Use anytime you make a mistake. Trust me, you will.
 * `M-x    ` - Run a command by name
 * `C-/    ` - Undo
-* `C-x m  ` -  Open magit. It's a magical git interface for emacs
 
 ### Files
 
