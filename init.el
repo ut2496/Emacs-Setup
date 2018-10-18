@@ -15,6 +15,14 @@
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (package-initialize)
+(elpy-enable)
+
+(add-hook 'elpy-mode-hook
+    (lambda ()
+      (define-key elpy-mode-map (kbd "C-c C-d") 'elpy-goto-definition)
+      (define-key elpy-mode-map (kbd "C-c C-u") 'xref-find-references)
+      (define-key elpy-mode-map (kbd "C-c C-r") 'pop-tag-mark)))
+
 
 (load "D:\\Emacs\\csharp-mode.el")
 
@@ -114,7 +122,8 @@
   :config
   (projectile-mode +1)
   (add-to-list 'projectile-globally-ignored-directories "node_modules")
-)
+  )
+(setq projectile-indexing-method 'turbo-alien)
 
 ;; autocomplete
 (use-package company
@@ -282,7 +291,7 @@
  '(org-export-backends (quote (ascii html icalendar latex md)))
  '(package-selected-packages
    (quote
-    (dracula-theme fireplace nyan-mode telephone-line symon xkcd zenburn-theme elpy ag smart-mode-line-powerline-theme smart-mode-line indent-guide yasnippet-snippets omnisharp markdown-mode slime helm-ag web-mode helm-projectile rjsx-mode npm-mode json-mode yasnippet dashboard helm avy undo-tree which-key flycheck company projectile magit crux expand-region smartparens nlinum doom-themes use-package))))
+    (elpygen dracula-theme fireplace nyan-mode telephone-line symon xkcd zenburn-theme elpy ag smart-mode-line-powerline-theme smart-mode-line indent-guide yasnippet-snippets omnisharp markdown-mode slime helm-ag web-mode helm-projectile rjsx-mode npm-mode json-mode yasnippet dashboard helm avy undo-tree which-key flycheck company projectile magit crux expand-region smartparens nlinum doom-themes use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
