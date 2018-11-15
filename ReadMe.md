@@ -77,3 +77,9 @@ My personal variations for `Projectile` package have been mentioned in the `init
 * `C-x 1  ` - Close other windows
 * `C-x 3  ` - Split window vertically
 * `C-x o  ` - Switch between windows
+
+### Client Setup and Editor Support
+* Change the Target of the emacsclient to the following to prevent opening multiple emacs and use the existing one for new scripts:
+  `INSTALL_PATH\emacs\bin\emacsclientw.exe -n -c -a "INSTALL_PATH\emacs\bin\runemacs.exe"`
+
+* Add this to the external editor arguments of the Software you are using if you want to use Emacs as the editor. This opens up the script at the desired line : `-a "INSTALL_PATH\emacs\bin\runemacs.exe" -n +"$(Line)" "$(File)"`
