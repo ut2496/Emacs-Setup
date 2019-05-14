@@ -1,11 +1,10 @@
 (setq user-full-name "Utkarsh Shekhar"
       user-mail-address "ushekhar@livelikevr.com")
 
-
 ;;  basic emacs
 (setq gc-cons-threshold 50000000)
 (setq large-file-warning-threshold 100000000)
-(setq warning-minimum-level :emergency)
+(defvar warning-minimum-level :emergency)
 
 
 ;; setup use-package
@@ -15,14 +14,6 @@
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (package-initialize)
-(elpy-enable)
-
-(add-hook 'elpy-mode-hook
-    (lambda ()
-      (define-key elpy-mode-map (kbd "C-c C-d") 'elpy-goto-definition)
-      (define-key elpy-mode-map (kbd "C-c C-u") 'xref-find-references)
-      (define-key elpy-mode-map (kbd "C-c C-r") 'pop-tag-mark)))
-
 
 (load "D:\\Emacs\\csharp-mode.el")
 
@@ -49,8 +40,8 @@
 (setq inhibit-startup-screen t)
 (setq frame-title-format
       '((:eval (if (buffer-file-name)
-       (abbreviate-file-name (buffer-file-name))
-     "%b"))))
+                   (abbreviate-file-name (buffer-file-name))
+                 "%b"))))
 (setq scroll-margin 0
       scroll-conservatively 100000
       scroll-preserve-screen-position 1)
@@ -80,7 +71,7 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (setq-default tab-width 4
-      indent-tabs-mode nil)
+              indent-tabs-mode nil)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 (add-hook 'before-save-hook 'whitespace-cleanup)
 (global-display-line-numbers-mode 1)
@@ -122,21 +113,33 @@
   :config
   (projectile-mode +1)
   (add-to-list 'projectile-globally-ignored-directories "node_modules")
+  (add-to-list 'projectile-globally-ignored-file-suffixes . (".dll"))
+  (add-to-list 'projectile-globally-ignored-file-suffixes . (".meta"))
+  (add-to-list 'projectile-globally-ignored-file-suffixes . (".pdb"))
+  (add-to-list 'projectile-globally-ignored-file-suffixes . (".mdb"))
+  (add-to-list 'projectile-globally-ignored-file-suffixes . (".prefab"))
+  (add-to-list 'projectile-globally-ignored-file-suffixes . (".png"))
+  (add-to-list 'projectile-globally-ignored-file-suffixes . (".jpeg"))
+  (add-to-list 'projectile-globally-ignored-file-suffixes . (".aar"))
+  (add-to-list 'projectile-globally-ignored-file-suffixes . (".jar"))
+  (add-to-list 'projectile-globally-ignored-file-suffixes . (".unitypackage"))
+  (add-to-list 'projectile-globally-ignored-file-suffixes . (".pdf"))
   )
-(setq projectile-indexing-method 'turbo-alien)
 
 ;; autocomplete
 (use-package company
   :ensure t
   :diminish company-mode
   :config
-  (global-company-mode))
+  (add-hook 'after-init-hook #'global-company-mode))
 
 (use-package flycheck
   :ensure t
   :diminish flycheck-mode
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode))
+
+(setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
 
 (use-package which-key
   :ensure t
@@ -162,21 +165,22 @@
   :delight
   :defer 2
   :bind
-  ("M-x" . helm-M-x)
-  ("C-x C-f" . helm-find-files)
-  ("M-y" . helm-show-kill-ring)
-  ("C-x b" . helm-mini)
+  (("M-x" . helm-M-x)
+   ("C-x C-f" . helm-find-files)
+   ("M-y" . helm-show-kill-ring)
+   ("C-x b" . helm-mini)
+   :map helm-map
+   ("<tab>" . helm-execute-persistent-action)
+   ("C-i" . helm-execute-persistent-action)
+   ("C-z" . helm-select-action))
   :config
   (require 'helm-config)
   (helm-mode 1)
   (setq helm-split-window-inside-p t
-    helm-move-to-line-cycle-in-source t)
+        helm-move-to-line-cycle-in-source t)
   (setq helm-autoresize-max-height 0)
   (setq helm-autoresize-min-height 20)
   (helm-autoresize-mode 1)
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
-  (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
   )
 
 (use-package helm-projectile
@@ -214,8 +218,8 @@
   :ensure t
   :config
   (setq js-indent-level 2
-    js2-mode-show-parse-errors nil
-    js2-strict-missing-semi-warning nil)
+        js2-mode-show-parse-errors nil
+        js2-strict-missing-semi-warning nil)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
   )
 
@@ -225,53 +229,51 @@
   :config
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-engines-alist
-    '(("ctemplate"    . "\\.html\\'")))
+        '(("ctemplate"    . "\\.html\\'")))
   )
-
-(use-package omnisharp
-  :ensure t
-  :config
-  (define-key omnisharp-mode-map (kbd "C-c C-u") 'omnisharp-helm-find-usages)
-  (define-key omnisharp-mode-map (kbd "C-c C-d") 'omnisharp-go-to-definition)
-  (define-key omnisharp-mode-map (kbd "C-c C-c") 'omnisharp-reload-solution)
-  (define-key omnisharp-mode-map (kbd "C-c C-r") 'omnisharp-rename))
-
-(add-hook 'csharp-mode-hook 'omnisharp-mode)
-
-(eval-after-load
- 'company
- '(add-to-list 'company-backends 'company-omnisharp))
-
-(defun git-bash () (interactive)
-  (let ((explicit-shell-file-name "c:/Program Files/Git/bin/bash.exe"))
-    (call-interactively 'shell)))
-
-(setq omnisharp-server-executable-path "c:/Users/ushek/AppData/Roaming/.emacs.d/.cache/omnisharp/server/v1.32.1/OmniSharp.exe")
-
-(setq projectile-indexing-method 'alien)
-(add-to-list 'projectile-globally-ignored-file-suffixes . (".dll"))
-(add-to-list 'projectile-globally-ignored-file-suffixes . (".meta"))
-(add-to-list 'projectile-globally-ignored-file-suffixes . (".pdb"))
-(add-to-list 'projectile-globally-ignored-file-suffixes . (".mdb"))
-(add-to-list 'projectile-globally-ignored-file-suffixes . (".prefab"))
-(add-to-list 'projectile-globally-ignored-file-suffixes . (".png"))
-(add-to-list 'projectile-globally-ignored-file-suffixes . (".jpeg"))
-(add-to-list 'projectile-globally-ignored-file-suffixes . (".aar"))
-(add-to-list 'projectile-globally-ignored-file-suffixes . (".jar"))
-(add-to-list 'projectile-globally-ignored-file-suffixes . (".unitypackage"))
-(add-to-list 'projectile-globally-ignored-file-suffixes . (".pdf"))
-
-
-(add-to-list 'command-switch-alist '("(make-frame-visible)" .
-                                     (lambda (s))))
 
 (require 'server)
 (if (not (server-running-p)) (server-start))
 
+(use-package omnisharp
+  :ensure t
+  :bind
+  (:map omnisharp-mode-map
+        ("C-c C-u" . omnisharp-helm-find-usages)
+        ("C-c C-d" . omnisharp-go-to-definition)
+        ("C-c C-c" . omnisharp-reload-solution)
+        ("C-c r" . omnisharp-rename)
+        ("C-c C-r" . pop-tag-mark)))
+
+
+(add-hook 'csharp-mode-hook 'omnisharp-mode)
+
+(eval-after-load
+    'company
+  '(add-to-list 'company-backends 'company-omnisharp))
+
+(defun git-bash () (interactive)
+       (let ((explicit-shell-file-name "c:/Program Files/Git/bin/bash.exe"))
+         (call-interactively 'shell)))
+
+(setq omnisharp-server-executable-path "c:/Users/ushek/AppData/Roaming/.emacs.d/.cache/omnisharp/server/v1.32.1/OmniSharp.exe")
+
+(setq projectile-indexing-method 'alien)
+
+(setq projectile-globally-ignored-file-suffixes '(".meta"))
+
+(add-to-list 'command-switch-alist '("(make-frame-visible)" .
+                                     (lambda (s))))
+
 (use-package elpy
   :ensure t
-  :config
-  (elpy-enable))
+  :bind
+  (:map elpy-mode-map
+        ("C-c C-d" . elpy-goto-definition)
+        ("C-c C-u" . xref-find-references)
+        ("C-c C-r" . pop-tag-mark))
+:init
+(elpy-enable))
 
 (use-package telephone-line
   :ensure t
@@ -291,7 +293,7 @@
  '(org-export-backends (quote (ascii html icalendar latex md)))
  '(package-selected-packages
    (quote
-    (elpygen dracula-theme fireplace nyan-mode telephone-line symon xkcd zenburn-theme elpy ag smart-mode-line-powerline-theme smart-mode-line indent-guide yasnippet-snippets omnisharp markdown-mode slime helm-ag web-mode helm-projectile rjsx-mode npm-mode json-mode yasnippet dashboard helm avy undo-tree which-key flycheck company projectile magit crux expand-region smartparens nlinum doom-themes use-package))))
+    (groovy-mode terraform-mode elpygen dracula-theme fireplace nyan-mode telephone-line symon xkcd zenburn-theme elpy ag smart-mode-line-powerline-theme smart-mode-line indent-guide yasnippet-snippets omnisharp markdown-mode slime helm-ag web-mode helm-projectile rjsx-mode npm-mode json-mode yasnippet dashboard helm avy undo-tree which-key flycheck company projectile magit crux expand-region smartparens nlinum doom-themes use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -299,3 +301,4 @@
  ;; If there is more than one, they won't work right.
  '(show-paren-match ((t (:background "#1B2229" :foreground "#ff6c6b")))))
 (put 'narrow-to-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
