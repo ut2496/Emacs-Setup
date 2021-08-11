@@ -1,5 +1,5 @@
 (setq user-full-name "Utkarsh Shekhar"
-      user-mail-address "ushekhar@livelikevr.com")
+      user-mail-address "utkarsh.shekhar@yahoo.co.in")
 
 ;;  basic emacs
 (setq gc-cons-threshold 50000000)
@@ -8,14 +8,13 @@
 
 
 ;; setup use-package
+
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (package-initialize)
-
-(load "D:\\Emacs\\csharp-mode.el")
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -25,7 +24,6 @@
   (require 'use-package))
 (require 'bind-key)
 (setq use-package-verbose t)
-
 
 ;; basic visuals
 (menu-bar-mode 1)
@@ -46,23 +44,12 @@
       scroll-conservatively 100000
       scroll-preserve-screen-position 1)
 (setq mouse-wheel-progressive-speed nil)
-(set-frame-font "Hack 12" nil t)
-
 
 ;; backup
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
-
-
-;; theme
-(use-package doom-themes
-  :ensure t
-  :config
-  (load-theme 'doom-vibrant t)
-  (doom-themes-visual-bell-config))
-
 
 ;; basic editing
 (global-auto-revert-mode t)
@@ -76,8 +63,7 @@
 (add-hook 'before-save-hook 'whitespace-cleanup)
 (global-display-line-numbers-mode 1)
 
-
-;; Packages
+; Packages
 (use-package smartparens
   :ensure t
   :diminish smartparens-mode
@@ -90,8 +76,6 @@
 (use-package expand-region
   :ensure t
   :bind ("M-m" . er/expand-region))
-
-(use-package 'omnisharp)
 
 (use-package crux
   :ensure t
@@ -154,12 +138,7 @@
   :config
   (setq avy-background t))
 
-;; (use-package smart-shift
-;;   :ensure t
-;;   :config
-;;   (global-smart-shift-mode 1))
-
-
+(require 'helm)
 (use-package helm
   :ensure t
   :delight
@@ -183,6 +162,7 @@
   (helm-autoresize-mode 1)
   )
 
+(require 'helm-projectile)
 (use-package helm-projectile
   :ensure t
   :bind
@@ -245,20 +225,13 @@
         ("C-c r" . omnisharp-rename)
         ("C-c C-r" . pop-tag-mark)))
 
-
 (add-hook 'csharp-mode-hook 'omnisharp-mode)
 
 (eval-after-load
     'company
   '(add-to-list 'company-backends 'company-omnisharp))
 
-(defun git-bash () (interactive)
-       (let ((explicit-shell-file-name "c:/Program Files/Git/bin/bash.exe"))
-         (call-interactively 'shell)))
-
-(setq omnisharp-server-executable-path "c:/Users/ushek/AppData/Roaming/.emacs.d/.cache/omnisharp/server/v1.32.1/OmniSharp.exe")
-
-(setq projectile-indexing-method 'alien)
+;;(setq projectile-indexing-method 'alien)
 
 (setq projectile-globally-ignored-file-suffixes '(".meta"))
 
@@ -281,24 +254,21 @@
   (telephone-line-mode 1))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; theme
+(use-package doom-themes
+  :ensure t
+  :config
+  (load-theme 'doom-vibrant t)
+  (doom-themes-visual-bell-config))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("a3fa4abaf08cc169b61dea8f6df1bbe4123ec1d2afeb01c17e11fdc31fc66379" "1c082c9b84449e54af757bcae23617d11f563fc9f33a832a8a2813c4d7dfb652" "356e5cbe0874b444263f3e1f9fffd4ae4c82c1b07fe085ba26e2a6d332db34dd" "93a0885d5f46d2aeac12bf6be1754faa7d5e28b27926b8aa812840fe7d0b7983" "75d3dde259ce79660bac8e9e237b55674b910b470f313cdf4b019230d01a982a" "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" default)))
- '(org-export-backends (quote (ascii html icalendar latex md)))
- '(package-selected-packages
-   (quote
-    (groovy-mode terraform-mode elpygen dracula-theme fireplace nyan-mode telephone-line symon xkcd zenburn-theme elpy ag smart-mode-line-powerline-theme smart-mode-line indent-guide yasnippet-snippets omnisharp markdown-mode slime helm-ag web-mode helm-projectile rjsx-mode npm-mode json-mode yasnippet dashboard helm avy undo-tree which-key flycheck company projectile magit crux expand-region smartparens nlinum doom-themes use-package))))
+ '(package-selected-packages '(crux expand-region smartparens use-package doom-themes)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(show-paren-match ((t (:background "#1B2229" :foreground "#ff6c6b")))))
-(put 'narrow-to-region 'disabled nil)
-(put 'upcase-region 'disabled nil)
+ )
